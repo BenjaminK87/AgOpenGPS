@@ -137,6 +137,49 @@ namespace AgOpenGPS
             }
         }
 
+        //called by watchdog timer every 10 ms, returns true if new valid fix
+        private bool ScanForUBlox()
+        {
+            //update the recv string so it can display at least something
+            recvSentenceSettings = uBlox.rawBuffer.ToString();
+
+            //parse any data from uBlox.rawBuffer
+            uBlox.parseUBX();
+            uBlox2.parseUBX();
+
+            //time for a frame update with new valid nmea data
+            if (uBlox.updatedPVT | uBlox.updatedRelPosNED | uBlox2.updatedPVT | uBlox2.updatedRelPosNED)
+            {
+                //Measure the frequency of the GPS updates
+                swHz.Stop();
+                nowHz = ((double)System.Diagnostics.Stopwatch.Frequency) / (double)swHz.ElapsedTicks;
+
+                //simple comp filter
+                if (nowHz < 20) HzTime = 0.95 * HzTime + 0.05 * nowHz;
+                //HzTime = Math.Round(HzTime, 0);
+
+                swHz.Reset();
+                swHz.Start();
+
+                //reset  flags
+                uBlox.updatedPVT = false;
+                uBlox.updatedRelPosNED = false;
+
+                //update all data for new frame
+                UpdateFixPosition();
+
+                //Update the port connection counter - is reset every time new sentence is valid and ready
+                recvCounter++;
+
+                //new position updated
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public double rollUsed;
         public double headlandDistanceDelta = 0, boundaryDistanceDelta = 0;
 

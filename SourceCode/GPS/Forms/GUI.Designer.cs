@@ -1251,6 +1251,19 @@ namespace AgOpenGPS
             }
         }
 
+        private int Search(byte[] src, byte[] pattern)
+        {
+            int c = src.Length - pattern.Length + 1;
+            int j;
+            for (int i = 0; i < c; i++)
+            {
+                if (src[i] != pattern[0]) continue;
+                for (j = pattern.Length - 1; j >= 1 && src[i + j] == pattern[j]; j--) ;
+                if (j == 0) return i;
+            }
+            return -1;
+        }
+
         private void ShowNoGPSWarning()
         {
             //update main window
@@ -1264,19 +1277,24 @@ namespace AgOpenGPS
         //Timer stopped while parsing nmea
         private void tmrWatchdog_tick(object sender, EventArgs e)
         {
+            //search beginning of ubx frame (Hex B5, Hex 62)
+            byte[] pattern = new byte[] {181, 98};
+            int ubxStart = Search(uBlox.rawBuffer, pattern);
             //Check for a newline char, if none then just return
             sentenceCounter++;
             int cr = pn.rawBuffer.IndexOf("\n", StringComparison.Ordinal);
+
+            //if (cr == -1 | ubxStart == -1) return;
             if (sentenceCounter > 80) 
                 ShowNoGPSWarning();
 
-            if (cr == -1) return;
+            //if (cr == -1) return;
 
             //go see if data ready for draw and position updates
             tmrWatchdog.Enabled = false;
 
             //did we get a new fix position?
-            if (ScanForNMEA())
+            if (ScanForUBlox() | ScanForNMEA())
             {
                 //reset the dead GPS counter
                 if (sentenceCounter > 98)
