@@ -13,8 +13,6 @@ namespace AgOpenGPS
 {
     public partial class FormGPS
     {
-        public bool useUBX = false;
-
         public static string portNameGPS = "COM GPS";
         public static int baudRateGPS = 115200;
 
@@ -27,7 +25,7 @@ namespace AgOpenGPS
         public static string portNameAutoSteer = "COM AS";
         public static int baudRateAutoSteer = 38400;
 
-        public bool isJRK;
+        public bool isJRK, useUBlox;
 
         public string NMEASentence = "No Data";
 
@@ -553,7 +551,7 @@ namespace AgOpenGPS
             {
                 try
                 {
-                    if (useUBX)
+                    if (useUBlox)
                     {
                         //read whatever is in port
                         int bytes = sp.BytesToRead;
@@ -691,7 +689,7 @@ namespace AgOpenGPS
             {
                 try
                 {
-                    if (useUBX)
+                    if (useUBlox)
                     {
                         //read whatever is in port
                         int bytes = spGPS2.BytesToRead;

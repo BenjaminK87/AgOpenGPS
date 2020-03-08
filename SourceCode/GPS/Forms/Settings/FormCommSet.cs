@@ -377,5 +377,13 @@ namespace AgOpenGPS
             Properties.Settings.Default.Save();
             mf.isJRK = Properties.Settings.Default.setAS_isJRK;
         }
+
+        private void cbUseUBlox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.set_useUBlox = cbUseUBlox.Checked;
+            Properties.Settings.Default.Save();
+            mf.useUBlox = Properties.Settings.Default.set_useUBlox;
+            
+        }
     } //class
 } //namespace

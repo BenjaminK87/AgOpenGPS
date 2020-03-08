@@ -66,6 +66,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btnOpenSerialAutoSteer = new System.Windows.Forms.Button();
             this.btnCloseSerialAutoSteer = new System.Windows.Forms.Button();
+            this.cbUseUBlox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -108,6 +109,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox1.Controls.Add(this.cbUseUBlox);
             this.groupBox1.Controls.Add(this.cboxPort2);
             this.groupBox1.Controls.Add(this.cboxBaud2);
             this.groupBox1.Controls.Add(this.lblCurrentPort2);
@@ -551,6 +553,18 @@
             this.btnCloseSerialAutoSteer.UseVisualStyleBackColor = false;
             this.btnCloseSerialAutoSteer.Click += new System.EventHandler(this.btnCloseSerialAutoSteer_Click);
             // 
+            // cbUseUBlox
+            // 
+            this.cbUseUBlox.AutoSize = true;
+            this.cbUseUBlox.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbUseUBlox.Location = new System.Drawing.Point(354, 112);
+            this.cbUseUBlox.Name = "cbUseUBlox";
+            this.cbUseUBlox.Size = new System.Drawing.Size(90, 29);
+            this.cbUseUBlox.TabIndex = 68;
+            this.cbUseUBlox.Text = "uBlox";
+            this.cbUseUBlox.UseVisualStyleBackColor = true;
+            this.cbUseUBlox.CheckedChanged += new System.EventHandler(this.cbUseUBlox_CheckedChanged);
+            // 
             // FormCommSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -618,5 +632,6 @@
         private System.Windows.Forms.Label lblCurrentBaud2;
         private System.Windows.Forms.Button btnCloseSerial2;
         private System.Windows.Forms.Button btnOpenSerial2;
+        private System.Windows.Forms.CheckBox cbUseUBlox;
     }
 }

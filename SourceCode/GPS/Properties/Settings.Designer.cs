@@ -980,7 +980,22 @@ namespace AgOpenGPS.Properties {
                 this["setAS_isJRK"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool set_useUBlox
+        {
+            get
+            {
+                return ((bool)(this["set_useUBlox"]));
+            }
+            set
+            {
+                this["set_useUBlox"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]

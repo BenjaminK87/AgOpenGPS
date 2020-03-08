@@ -283,8 +283,13 @@ namespace AgOpenGPS
             mf.recvCounter = 0;
 
             //average the speed
-            mf.avgSpeed[mf.ringCounter] = mf.pn.speed;
-            if (mf.ringCounter++ > 8) mf.ringCounter = 0;
+            AverageTheSpeed();
+        }
+
+        private void AverageTheSpeed()
+        {
+            //average the speed
+            mf.avgSpeed = (mf.avgSpeed * 0.8) + (mf.pn.speed * 0.2);
         }
 
         private bool GetBit(byte b, int bitNumber)

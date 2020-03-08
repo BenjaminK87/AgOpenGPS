@@ -144,11 +144,8 @@
             this.lblLength = new System.Windows.Forms.Label();
             this.lblD = new System.Windows.Forms.Label();
             this.lblE = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.lblLift = new System.Windows.Forms.Label();
             this.lblN = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.lblSunset = new System.Windows.Forms.Label();
             this.lblSunrise = new System.Windows.Forms.Label();
             this.lblTrigger = new System.Windows.Forms.Label();
@@ -1292,7 +1289,6 @@
             this.panelBatman.Controls.Add(this.lblLength);
             this.panelBatman.Controls.Add(this.lblD);
             this.panelBatman.Controls.Add(this.lblE);
-            this.panelBatman.Controls.Add(this.label4);
             this.panelBatman.Controls.Add(this.lblNorth);
             this.panelBatman.Controls.Add(this.lblEast);
             this.panelBatman.Controls.Add(this.label3);
@@ -3822,7 +3818,6 @@
         public System.Windows.Forms.Label lblLength;
         public System.Windows.Forms.Label lblD;
         public System.Windows.Forms.Label lblE;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblInHead;
         private System.Windows.Forms.Label lblIsHdClose;
         private System.Windows.Forms.Label lblNorth;
