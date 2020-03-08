@@ -616,7 +616,7 @@
     <value>Nichts gelöscht</value>
   </data>
   <data name="gsOff" xml:space="preserve">
-    <value>Ausgewählte verwenden</value>
+    <value>Ausschalten</value>
   </data>
   <data name="gsOffline" xml:space="preserve">
     <value>Offline</value>
@@ -655,7 +655,7 @@
     <value>Wähle 2 Punkte</value>
   </data>
   <data name="gsPleaseCompleteABLine" xml:space="preserve">
-    <value>Bitte  vervollständigen sie  ABLine</value>
+    <value>Bitte  vervollständigen sie ABLine</value>
   </data>
   <data name="gsPleaseEnterABLine" xml:space="preserve">
     <value>Bitte geben Sie ABLine ein</value>
@@ -674,9 +674,6 @@
   </data>
   <data name="gsPursuitLine" xml:space="preserve">
     <value>Verfolgungslinie</value>
-  </data>
-  <data name="gsReallyResetEverything" xml:space="preserve">
-    <value>Alles wirklich zurücksetzen?</value>
   </data>
   <data name="gsRecord" xml:space="preserve">
     <value>Aufzeichnung</value>
@@ -929,5 +926,8 @@
   </data>
   <data name="gsWorkSwitchControlsManual" xml:space="preserve">
     <value>Arbeitsschalter Bedienung Manuell</value>
+  </data>
+  <data name="gsReallyResetEverything" xml:space="preserve">
+    <value>Wirklich alles zurücksetzen?</value>
   </data>
 </root>

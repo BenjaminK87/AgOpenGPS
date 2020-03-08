@@ -73,7 +73,7 @@ namespace AgOpenGPS
         //swDraw.Start();
         //swDraw.Stop();
         //label3.Text = ((double) swDraw.ElapsedTicks / (double) System.Diagnostics.Stopwatch.Frequency * 1000).ToString();
-
+        
         //Time to do fix position update and draw routine
 
         private double frameTime = 0;
@@ -127,6 +127,16 @@ namespace AgOpenGPS
         /// The NMEA class that decodes it
         /// </summary>
         public CNMEA pn;
+
+        /// <summary>
+        /// The uBlox class that decodes it
+        /// </summary>
+        public CUBlox uBlox;
+
+        /// <summary>
+        /// The uBlox2 class that decodes it
+        /// </summary>
+        public CUBlox uBlox2;
 
         /// <summary>
         /// an array of sections, so far 16 section + 1 fullWidth Section
@@ -349,6 +359,12 @@ namespace AgOpenGPS
 
             //our NMEA parser
             pn = new CNMEA(this);
+
+            //our uBlox parser
+            uBlox = new CUBlox(this);
+
+            //our uBlox parser
+            uBlox2 = new CUBlox(this);
 
             //create the ABLine instance
             ABLine = new CABLine(this);

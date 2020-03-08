@@ -58,7 +58,38 @@ namespace AgOpenGPS.Properties {
                 this["setPort_baudRate"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("COM GPS2...")]
+        public string setPort_portNameGPS2
+        {
+            get
+            {
+                return ((string)(this["setPort_portNameGPS2"]));
+            }
+            set
+            {
+                this["setPort_portNameGPS2"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("115200")]
+        public int setPort_baudRate2
+        {
+            get
+            {
+                return ((int)(this["setPort_baudRate2"]));
+            }
+            set
+            {
+                this["setPort_baudRate2"] = value;
+            }
+        }
+
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("30, 30")]
@@ -634,7 +665,22 @@ namespace AgOpenGPS.Properties {
                 this["setPort_NMEAHz"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int setPort_NMEAHz2
+        {
+            get
+            {
+                return ((int)(this["setPort_NMEAHz2"]));
+            }
+            set
+            {
+                this["setPort_NMEAHz2"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]

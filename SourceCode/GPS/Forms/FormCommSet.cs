@@ -16,9 +16,11 @@ namespace AgOpenGPS
             mf = callingForm as FormGPS;
             InitializeComponent();
             btnOpenSerial.Text = gStr.gsConnect;
+            btnOpenSerial2.Text = gStr.gsConnect;
             btnOpenSerialArduino.Text = gStr.gsConnect;
             btnOpenSerialAutoSteer.Text = gStr.gsConnect;
             btnCloseSerial.Text = gStr.gsDisconnect;
+            btnCloseSerial2.Text = gStr.gsDisconnect;
             btnCloseSerialArduino.Text = gStr.gsDisconnect;
             btnCloseSerialAutoSteer.Text = gStr.gsDisconnect;
             btnRescan.Text = gStr.gsRescanPorts;
@@ -34,8 +36,10 @@ namespace AgOpenGPS
 
             lblCurrentArduinoPort.Text = gStr.gsPort;
             lblCurrentPort.Text = gStr.gsPort;
+            lblCurrentPort2.Text = gStr.gsPort;
             lblCurrentAutoSteerPort.Text = gStr.gsPort;
             lblCurrentBaud.Text = gStr.gsBaud;
+            lblCurrentBaud2.Text = gStr.gsBaud;
 
         }
 
@@ -55,6 +59,10 @@ namespace AgOpenGPS
                 cboxPort.Enabled = false;
                 btnCloseSerial.Enabled = true;
                 btnOpenSerial.Enabled = false;
+                cboxBaud2.Enabled = false;
+                cboxPort2.Enabled = false;
+                btnCloseSerial2.Enabled = true;
+                btnOpenSerial2.Enabled = false;
             }
             else
             {
@@ -62,6 +70,10 @@ namespace AgOpenGPS
                 cboxPort.Enabled = true;
                 btnCloseSerial.Enabled = false;
                 btnOpenSerial.Enabled = true;
+                cboxBaud2.Enabled = true;
+                cboxPort2.Enabled = true;
+                btnCloseSerial2.Enabled = false;
+                btnOpenSerial2.Enabled = true;
             }
 
             //check if Arduino port is open or closed and set buttons accordingly
@@ -94,17 +106,21 @@ namespace AgOpenGPS
 
             //load the port box with valid port names
             cboxPort.Items.Clear();
+            cboxPort2.Items.Clear();
             cboxArdPort.Items.Clear();
             cboxASPort.Items.Clear();
             foreach (String s in System.IO.Ports.SerialPort.GetPortNames())
             {
                 cboxPort.Items.Add(s);
+                cboxPort2.Items.Add(s);
                 cboxArdPort.Items.Add(s);
                 cboxASPort.Items.Add(s);
             }
 
             lblCurrentBaud.Text = mf.sp.BaudRate.ToString();
             lblCurrentPort.Text = mf.sp.PortName;
+            lblCurrentBaud2.Text = mf.spGPS2.BaudRate.ToString();
+            lblCurrentPort2.Text = mf.spGPS2.PortName;
             lblCurrentArduinoPort.Text = mf.spRelay.PortName;
             lblCurrentAutoSteerPort.Text = mf.spAutoSteer.PortName;
         }
@@ -264,6 +280,66 @@ namespace AgOpenGPS
             }
         }
 
+        // GPS Serial Port
+        private void cboxBaud2_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            mf.spGPS2.BaudRate = Convert.ToInt32(cboxBaud2.Text);
+            FormGPS.baudRateGPS2 = Convert.ToInt32(cboxBaud2.Text);
+        }
+
+        private void cboxPort2_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            mf.spGPS2.PortName = cboxPort2.Text;
+            FormGPS.portNameGPS2 = cboxPort2.Text;
+        }
+
+        private void btnOpenSerial2_Click(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.setMenu_isSimulatorOn)
+            {
+                MessageBox.Show(gStr.gsGotoTopMenuDisplayTouchSimulator + "\n\r" + gStr.gsApplicationWillRestart, gStr.gsSimulatorOnMustbeOFF, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                mf.SerialPortOpenGPS2();
+                if (mf.spGPS2.IsOpen)
+                {
+                    cboxBaud2.Enabled = false;
+                    cboxPort2.Enabled = false;
+                    btnCloseSerial2.Enabled = true;
+                    btnOpenSerial2.Enabled = false;
+                    lblCurrentBaud2.Text = mf.spGPS2.BaudRate.ToString();
+                    lblCurrentPort2.Text = mf.spGPS2.PortName;
+                }
+                else
+                {
+                    cboxBaud2.Enabled = true;
+                    cboxPort2.Enabled = true;
+                    btnCloseSerial2.Enabled = false;
+                    btnOpenSerial2.Enabled = true;
+                }
+            }
+        }
+
+        private void btnCloseSerial2_Click(object sender, EventArgs e)
+        {
+            mf.SerialPortCloseGPS2();
+            if (mf.spGPS2.IsOpen)
+            {
+                cboxBaud2.Enabled = false;
+                cboxPort2.Enabled = false;
+                btnCloseSerial2.Enabled = true;
+                btnOpenSerial2.Enabled = false;
+            }
+            else
+            {
+                cboxBaud2.Enabled = true;
+                cboxPort2.Enabled = true;
+                btnCloseSerial2.Enabled = false;
+                btnOpenSerial2.Enabled = true;
+            }
+        }
+
         private void btnRescan_Click(object sender, EventArgs e)
         {
             cboxASPort.Items.Clear();
@@ -273,6 +349,9 @@ namespace AgOpenGPS
             foreach (String s in System.IO.Ports.SerialPort.GetPortNames()) { cboxArdPort.Items.Add(s); }
 
             cboxPort.Items.Clear();
+            foreach (String s in System.IO.Ports.SerialPort.GetPortNames()) { cboxPort.Items.Add(s); }
+
+            cboxPort2.Items.Clear();
             foreach (String s in System.IO.Ports.SerialPort.GetPortNames()) { cboxPort.Items.Add(s); }
         }
 

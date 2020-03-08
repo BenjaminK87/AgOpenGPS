@@ -2,17 +2,24 @@
 
 using System.IO.Ports;
 using System;
+using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Globalization;
 using AgOpenGPS.Properties;
+using System.Collections.Generic;
 
 namespace AgOpenGPS
 {
     public partial class FormGPS
     {
+        public bool useUBX = false;
+
         public static string portNameGPS = "COM GPS";
-        public static int baudRateGPS = 4800;
+        public static int baudRateGPS = 115200;
+
+        public static string portNameGPS2 = "COM GPS2";
+        public static int baudRateGPS2 = 115200;
 
         public static string portNameRelaySection = "COM Sect";
         public static int baudRateRelaySection = 38400;
@@ -33,6 +40,9 @@ namespace AgOpenGPS
 
         //serial port gps is connected to
         public SerialPort sp = new SerialPort(portNameGPS, baudRateGPS, Parity.None, 8, StopBits.One);
+
+        //serial port gps2 is connected to
+        public SerialPort spGPS2 = new SerialPort(portNameGPS2, baudRateGPS2, Parity.None, 8, StopBits.One);
 
         //serial port Arduino is connected to
         public SerialPort spRelay = new SerialPort(portNameRelaySection, baudRateRelaySection, Parity.None, 8, StopBits.One);
@@ -477,25 +487,57 @@ namespace AgOpenGPS
         private void SerialLineReceived(string sentence)
         {
             //spit it out no matter what it says
-            pn.rawBuffer += sentence;
+            pn.rawBuffer += sentence; //NMEA
             //recvSentenceSettings = sbNMEAFromGPS.ToString();
         }
 
         private delegate void LineReceivedEventHandler(string sentence);
 
-        //serial port receive in its own thread
+        private void UBloxReceived(byte[] sentence)
+        {
+            int oldSizeRawBuffer = uBlox.rawBuffer.Length;
+
+            //get actual rawBuffer
+            byte[] old = new byte[oldSizeRawBuffer];
+            System.Buffer.BlockCopy(uBlox.rawBuffer, 0, old, 0, uBlox.rawBuffer.Length);
+
+            //resize rawBuffer to new size
+            Array.Resize<byte>(ref uBlox.rawBuffer, oldSizeRawBuffer + sentence.Length);
+
+            //append sentence to rawBuffer
+            System.Buffer.BlockCopy(sentence, 0, uBlox.rawBuffer, oldSizeRawBuffer, sentence.Length);
+
+        }
+
+        private delegate void UBloxReceivedEventHandler(byte[] sentence);
+
+        //serial port receive in its own thread for NMEA
         private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             if (sp.IsOpen)
             {
                 try
                 {
-                    //give it a sec to spit it out
-                    //System.Threading.Thread.Sleep(2000);
+                    if (useUBX)
+                    {
+                        //read whatever is in port
+                        int bytes = sp.BytesToRead;
+                        byte[] buffer = new byte[bytes];
+                        sp.Read(buffer, 0, bytes);
 
-                    //read whatever is in port
-                    string sentence = sp.ReadExisting();
-                    this.BeginInvoke(new LineReceivedEventHandler(SerialLineReceived), sentence);
+                        this.BeginInvoke(new UBloxReceivedEventHandler(UBloxReceived), buffer);
+                    }
+                    else
+                    {
+                        //give it a sec to spit it out
+                        //System.Threading.Thread.Sleep(2000);
+
+                        //read whatever is in port
+                        string sentence = sp.ReadExisting();
+
+                        this.BeginInvoke(new LineReceivedEventHandler(SerialLineReceived), sentence);
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -583,6 +625,133 @@ namespace AgOpenGPS
         }
 
         #endregion SerialPortGPS
+
+        #region GPS2 SerialPort //--------------------------------------------------------------------------
+
+        //called by the GPS delegate every time a chunk is rec'd
+
+
+        private void UBloxReceived2(byte[] sentence)
+        {
+            int oldSizeRawBuffer = uBlox2.rawBuffer.Length;
+
+            //get actual rawBuffer
+            byte[] old = new byte[oldSizeRawBuffer];
+            System.Buffer.BlockCopy(uBlox2.rawBuffer, 0, old, 0, uBlox2.rawBuffer.Length);
+
+            //resize rawBuffer to new size
+            Array.Resize<byte>(ref uBlox2.rawBuffer, oldSizeRawBuffer + sentence.Length);
+
+            //append sentence to rawBuffer
+            System.Buffer.BlockCopy(sentence, 0, uBlox2.rawBuffer, oldSizeRawBuffer, sentence.Length);
+
+        }
+
+        private delegate void UBloxReceived2EventHandler(byte[] sentence);
+
+        //serial port receive in its own thread for NMEA
+        private void spGPS2_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            if (spGPS2.IsOpen)
+            {
+                try
+                {
+                    if (useUBX)
+                    {
+                        //read whatever is in port
+                        int bytes = spGPS2.BytesToRead;
+                        byte[] buffer = new byte[bytes];
+                        spGPS2.Read(buffer, 0, bytes);
+
+                        this.BeginInvoke(new UBloxReceived2EventHandler(UBloxReceived2), buffer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteErrorLog("GPS2 Data Recv" + ex.ToString());
+
+                    //MessageBox.Show(ex.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "ComPort Failure!");
+                }
+            }
+        }
+
+        public void SerialPortOpenGPS2()
+        {
+            //close it first
+            SerialPortCloseGPS2();
+
+            if (spGPS2.IsOpen)
+            {
+                simulatorOnToolStripMenuItem.Checked = false;
+                panelSim.Visible = false;
+                timerSim.Enabled = false;
+
+                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
+                Settings.Default.Save();
+            }
+
+
+            if (!sp.IsOpen)
+            {
+                spGPS2.PortName = portNameGPS;
+                spGPS2.BaudRate = baudRateGPS;
+                spGPS2.DataReceived += spGPS2_DataReceived;
+                spGPS2.WriteTimeout = 1000;
+            }
+
+            try { spGPS2.Open(); }
+            catch (Exception)
+            {
+                //MessageBox.Show(exc.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Serial Port Active");
+                //WriteErrorLog("Open GPS Port " + e.ToString());
+
+                //update port status labels
+                //stripPortGPS.Text = " * * ";
+                //stripPortGPS.ForeColor = Color.Red;
+                //stripOnlineGPS.Value = 1;
+
+                //SettingsPageOpen(0);
+            }
+
+            if (spGPS2.IsOpen)
+            {
+                //btnOpenSerial.Enabled = false;
+
+                //discard any stuff in the buffers
+                spGPS2.DiscardOutBuffer();
+                spGPS2.DiscardInBuffer();
+
+                //update port status label
+                //stripPortGPS.Text = portNameGPS + " " + baudRateGPS.ToString();
+                //stripPortGPS.ForeColor = Color.ForestGreen;
+
+                Properties.Settings.Default.setPort_portNameGPS2 = portNameGPS2;
+                Properties.Settings.Default.setPort_baudRate2 = baudRateGPS2;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public void SerialPortCloseGPS2()
+        {
+            //if (sp.IsOpen)
+            {
+                spGPS2.DataReceived -= spGPS2_DataReceived;
+                try { spGPS2.Close(); }
+                catch (Exception e)
+                {
+                    WriteErrorLog("Closing GPS Port 2" + e.ToString());
+                    MessageBox.Show(e.Message, "Connection already terminated?");
+                }
+
+                //update port status labels
+                //stripPortGPS.Text = " * * " + baudRateGPS.ToString();
+                //stripPortGPS.ForeColor = Color.ForestGreen;
+                //stripOnlineGPS.Value = 1;
+                spGPS2.Dispose();
+            }
+        }
+
+        #endregion SerialPortGPS2
 
     }//end class
 }//end namespace
