@@ -25,7 +25,7 @@ namespace AgOpenGPS
         public static string portNameAutoSteer = "COM AS";
         public static int baudRateAutoSteer = 38400;
 
-        public bool isJRK, useUBlox;
+        public bool isJRK, useUBlox, useNtripGPS1, useNtripGPS2;
 
         public string NMEASentence = "No Data";
 
@@ -724,10 +724,10 @@ namespace AgOpenGPS
             }
 
 
-            if (!sp.IsOpen)
+            if (!spGPS2.IsOpen)
             {
-                spGPS2.PortName = portNameGPS;
-                spGPS2.BaudRate = baudRateGPS;
+                spGPS2.PortName = portNameGPS2;
+                spGPS2.BaudRate = baudRateGPS2;
                 spGPS2.DataReceived += spGPS2_DataReceived;
                 spGPS2.WriteTimeout = 1000;
             }

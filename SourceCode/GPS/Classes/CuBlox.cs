@@ -95,14 +95,14 @@ namespace AgOpenGPS
 
         public void parseUBX()
         {
-            if (rawBuffer == null) return;
+            if (rawBuffer.Length == 0) return;
 
             //search beginning of ubx frame (Hex B5, Hex 62)
             byte[] pattern = new byte[] {181, 98};
             int ubxStart = Search(rawBuffer, pattern);
 
             //int ubxStart = rawBuffer.IndexOf("\u00B5\u0062");
-            if (ubxStart > -1  & rawBuffer.Length > 8) //minimum Frame Size with only one byte Payload
+            if (ubxStart > -1)//   & rawBuffer.Length > 8) //minimum Frame Size with only one byte Payload
             {
                 //Console.WriteLine("Starting new Parse");
                 //Console.Write("UBX in: ");
@@ -121,66 +121,74 @@ namespace AgOpenGPS
                 //resize rawBuffer to new size
                 Array.Resize<byte>(ref rawBuffer, rawBuffer.Length - ubxStart);
 
-                //Console.Write("Length: "); Console.WriteLine(rawBuffer.Length);
-                //Console.WriteLine("After Aligning Start of Sentence Array");
-                //for (int i = 0; i < rawBuffer.Length; i++)
-                //{
-                //    Console.Write(rawBuffer[i]);
-                //    Console.Write(" ");
-                //}
-                //Console.Write("\n");
-
-                int ubxClass = Convert.ToByte(rawBuffer[2]);
-                int ubxID = Convert.ToByte(rawBuffer[3]);
-                byte[] ubxLengtArray = new byte[2];
-                ubxLengtArray[0] = Convert.ToByte(rawBuffer[4]);
-                ubxLengtArray[1] = Convert.ToByte(rawBuffer[5]);
-                int ubxLength = BitConverter.ToInt16(ubxLengtArray, 0);
-
-                //Console.Write("Class: ");
-                //Console.Write(ubxClass);
-                //Console.Write(" ID: ");
-                //Console.Write(ubxID);
-                //Console.Write(" Length: ");
-                //Console.Write(ubxLength);
-                //Console.WriteLine("");
-
-                
-                if (ValidateChecksum(ubxLength))
+                if(rawBuffer.Length > 8) //minimum Frame Size with only one byte Payload
                 {
-                    
-                    if(ubxClass == 1 & ubxID == 7) //UBX-NAV-PVT
+                    //Console.Write("Length: "); Console.WriteLine(rawBuffer.Length);
+                    //Console.WriteLine("After Aligning Start of Sentence Array");
+                    //for (int i = 0; i < rawBuffer.Length; i++)
+                    //{
+                    //    Console.Write(rawBuffer[i]);
+                    //    Console.Write(" ");
+                    //}
+                    //Console.Write("\n");
+
+                    byte[] ubxLengtArray = new byte[2];
+                    ubxLengtArray[0] = Convert.ToByte(rawBuffer[4]);
+                    ubxLengtArray[1] = Convert.ToByte(rawBuffer[5]);
+                    int ubxLength = BitConverter.ToInt16(ubxLengtArray, 0);
+                    //Console.Write(" Length: ");
+                    //Console.Write(ubxLength);
+                    //Console.WriteLine("");
+
+
+                    if (ValidateChecksum(ubxLength))
                     {
-                        ParsePVT();
+                        int ubxClass = Convert.ToByte(rawBuffer[2]);
+                        int ubxID = Convert.ToByte(rawBuffer[3]);
+                        //Console.Write("Class: ");
+                        //Console.Write(ubxClass);
+                        //Console.Write(" ID: ");
+                        //Console.Write(ubxID);
+
+                        if (ubxClass == 1 & ubxID == 7) //UBX-NAV-PVT
+                        {
+                            ParsePVT();
+                        }
+                        else if (ubxClass == 1 & ubxID == 60) //UBX-NAV-RELPOSNED - Hex 3c
+                        {
+                            ParseRelPosNed();
+                        }
                     }
-                    else if (ubxClass == 1 & ubxID == 60) //UBX-NAV-RELPOSNED - Hex 3c
+
+                    // "Delete processed data from rawBuffer
+                    int totalFrameLength = 1 + 1 + 1 + 1 + 2 + ubxLength + 2;
+                    ////rawBuffer = rawBuffer.Substring(1 + 1 + 1 + 1 + 2 + ubxLength + 2); //1xHeader, 1xHeader, 1xClass, 1xID, 2x Length, 2x Checksum
+
+                    if (rawBuffer.Length > totalFrameLength)
                     {
-                        ParseRelPosNed();
+                        System.Buffer.BlockCopy(rawBuffer, totalFrameLength, rawBuffer, 0, rawBuffer.Length - totalFrameLength);
                     }
+                    //System.Buffer.BlockCopy(test, 0, rawBuffer, 0, 2);
+                    //resize rawBuffer to new size
+                    if (rawBuffer.Length - totalFrameLength > -1)
+                    {
+                        int newArraySize = rawBuffer.Length - totalFrameLength;
+                        Array.Resize<byte>(ref rawBuffer, newArraySize);
+                    }
+
+
+                    //Console.Write("Length: "); Console.WriteLine(rawBuffer.Length);
+                    //Console.WriteLine("Cutting Processed Parts");
+                    //for (int i = 0; i < rawBuffer.Length; i++)
+                    //{
+                    //    Console.Write(rawBuffer[i]);
+                    //    Console.Write(" ");
+                    //}
+                    //Console.Write("\n");
+
+                    //Console.WriteLine("End of Parse");
                 }
 
-                // "Delete processed data from rawBuffer
-                int totalFrameLength = 1 + 1 + 1 + 1 + 2 + ubxLength + 2;
-                ////rawBuffer = rawBuffer.Substring(1 + 1 + 1 + 1 + 2 + ubxLength + 2); //1xHeader, 1xHeader, 1xClass, 1xID, 2x Length, 2x Checksum
-                if (rawBuffer.Length > totalFrameLength)
-                {
-                    System.Buffer.BlockCopy(rawBuffer, totalFrameLength, rawBuffer, 0, rawBuffer.Length - totalFrameLength);
-                }
-                //System.Buffer.BlockCopy(test, 0, rawBuffer, 0, 2);
-                //resize rawBuffer to new size
-                int newArraySize = rawBuffer.Length - totalFrameLength;
-                Array.Resize<byte>(ref rawBuffer, newArraySize);
-
-                //Console.Write("Length: "); Console.WriteLine(rawBuffer.Length);
-                //Console.WriteLine("Cutting Processed Parts");
-                //for (int i = 0; i < rawBuffer.Length; i++)
-                //{
-                //    Console.Write(rawBuffer[i]);
-                //    Console.Write(" ");
-                //}
-                //Console.Write("\n");
-
-                //Console.WriteLine("End of Parse");
             }
             
         }

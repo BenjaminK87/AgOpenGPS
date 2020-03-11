@@ -995,6 +995,36 @@ namespace AgOpenGPS.Properties {
                 this["set_useUBlox"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool set_useNtripGPS1
+        {
+            get
+            {
+                return ((bool)(this["set_useNtripGPS1"]));
+            }
+            set
+            {
+                this["set_useNtripGPS1"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool set_useNtripGPS2
+        {
+            get
+            {
+                return ((bool)(this["set_useNtripGPS2"]));
+            }
+            set
+            {
+                this["set_useNtripGPS2"] = value;
+            }
+        }
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

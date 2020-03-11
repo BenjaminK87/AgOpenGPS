@@ -33,6 +33,9 @@
             this.btnRescan = new System.Windows.Forms.Button();
             this.btnSerialOK = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbNtripGPS2 = new System.Windows.Forms.CheckBox();
+            this.cbNtripGPS1 = new System.Windows.Forms.CheckBox();
+            this.cbUseUBlox = new System.Windows.Forms.CheckBox();
             this.cboxPort2 = new System.Windows.Forms.ComboBox();
             this.cboxBaud2 = new System.Windows.Forms.ComboBox();
             this.lblCurrentPort2 = new System.Windows.Forms.Label();
@@ -66,7 +69,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btnOpenSerialAutoSteer = new System.Windows.Forms.Button();
             this.btnCloseSerialAutoSteer = new System.Windows.Forms.Button();
-            this.cbUseUBlox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -109,6 +111,8 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox1.Controls.Add(this.cbNtripGPS2);
+            this.groupBox1.Controls.Add(this.cbNtripGPS1);
             this.groupBox1.Controls.Add(this.cbUseUBlox);
             this.groupBox1.Controls.Add(this.cboxPort2);
             this.groupBox1.Controls.Add(this.cboxBaud2);
@@ -132,6 +136,42 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GPS Port";
             // 
+            // cbNtripGPS2
+            // 
+            this.cbNtripGPS2.AutoSize = true;
+            this.cbNtripGPS2.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbNtripGPS2.Location = new System.Drawing.Point(343, 106);
+            this.cbNtripGPS2.Name = "cbNtripGPS2";
+            this.cbNtripGPS2.Size = new System.Drawing.Size(88, 29);
+            this.cbNtripGPS2.TabIndex = 76;
+            this.cbNtripGPS2.Text = "NTrip";
+            this.cbNtripGPS2.UseVisualStyleBackColor = true;
+            this.cbNtripGPS2.CheckedChanged += new System.EventHandler(this.cbNtripGPS2_CheckedChanged);
+            // 
+            // cbNtripGPS1
+            // 
+            this.cbNtripGPS1.AutoSize = true;
+            this.cbNtripGPS1.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbNtripGPS1.Location = new System.Drawing.Point(343, 42);
+            this.cbNtripGPS1.Name = "cbNtripGPS1";
+            this.cbNtripGPS1.Size = new System.Drawing.Size(88, 29);
+            this.cbNtripGPS1.TabIndex = 75;
+            this.cbNtripGPS1.Text = "NTrip";
+            this.cbNtripGPS1.UseVisualStyleBackColor = true;
+            this.cbNtripGPS1.CheckedChanged += new System.EventHandler(this.cbNtripGPS1_CheckedChanged);
+            // 
+            // cbUseUBlox
+            // 
+            this.cbUseUBlox.AutoSize = true;
+            this.cbUseUBlox.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbUseUBlox.Location = new System.Drawing.Point(102, 2);
+            this.cbUseUBlox.Name = "cbUseUBlox";
+            this.cbUseUBlox.Size = new System.Drawing.Size(90, 29);
+            this.cbUseUBlox.TabIndex = 68;
+            this.cbUseUBlox.Text = "uBlox";
+            this.cbUseUBlox.UseVisualStyleBackColor = true;
+            this.cbUseUBlox.CheckedChanged += new System.EventHandler(this.cbUseUBlox_CheckedChanged);
+            // 
             // cboxPort2
             // 
             this.cboxPort2.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -150,6 +190,7 @@
             this.cboxPort2.Name = "cboxPort2";
             this.cboxPort2.Size = new System.Drawing.Size(101, 37);
             this.cboxPort2.TabIndex = 74;
+            this.cboxPort2.SelectedIndexChanged += new System.EventHandler(this.cboxPort2_SelectedIndexChanged);
             // 
             // cboxBaud2
             // 
@@ -169,6 +210,7 @@
             this.cboxBaud2.Name = "cboxBaud2";
             this.cboxBaud2.Size = new System.Drawing.Size(113, 37);
             this.cboxBaud2.TabIndex = 73;
+            this.cboxBaud2.SelectedIndexChanged += new System.EventHandler(this.cboxBaud2_SelectedIndexChanged);
             // 
             // lblCurrentPort2
             // 
@@ -195,12 +237,13 @@
             this.btnCloseSerial2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btnCloseSerial2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnCloseSerial2.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCloseSerial2.Location = new System.Drawing.Point(608, 101);
+            this.btnCloseSerial2.Location = new System.Drawing.Point(594, 101);
             this.btnCloseSerial2.Name = "btnCloseSerial2";
             this.btnCloseSerial2.Size = new System.Drawing.Size(138, 40);
             this.btnCloseSerial2.TabIndex = 69;
             this.btnCloseSerial2.Text = "Disconnect";
             this.btnCloseSerial2.UseVisualStyleBackColor = false;
+            this.btnCloseSerial2.Click += new System.EventHandler(this.btnCloseSerial2_Click);
             // 
             // btnOpenSerial2
             // 
@@ -213,6 +256,7 @@
             this.btnOpenSerial2.TabIndex = 70;
             this.btnOpenSerial2.Text = "Connect";
             this.btnOpenSerial2.UseVisualStyleBackColor = false;
+            this.btnOpenSerial2.Click += new System.EventHandler(this.btnOpenSerial2_Click);
             // 
             // cboxPort
             // 
@@ -279,7 +323,7 @@
             this.btnCloseSerial.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btnCloseSerial.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnCloseSerial.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCloseSerial.Location = new System.Drawing.Point(608, 35);
+            this.btnCloseSerial.Location = new System.Drawing.Point(594, 36);
             this.btnCloseSerial.Name = "btnCloseSerial";
             this.btnCloseSerial.Size = new System.Drawing.Size(138, 40);
             this.btnCloseSerial.TabIndex = 44;
@@ -315,7 +359,7 @@
             this.btnOpenSerial.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btnOpenSerial.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnOpenSerial.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenSerial.Location = new System.Drawing.Point(458, 35);
+            this.btnOpenSerial.Location = new System.Drawing.Point(450, 37);
             this.btnOpenSerial.Name = "btnOpenSerial";
             this.btnOpenSerial.Size = new System.Drawing.Size(138, 40);
             this.btnOpenSerial.TabIndex = 45;
@@ -553,18 +597,6 @@
             this.btnCloseSerialAutoSteer.UseVisualStyleBackColor = false;
             this.btnCloseSerialAutoSteer.Click += new System.EventHandler(this.btnCloseSerialAutoSteer_Click);
             // 
-            // cbUseUBlox
-            // 
-            this.cbUseUBlox.AutoSize = true;
-            this.cbUseUBlox.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbUseUBlox.Location = new System.Drawing.Point(354, 112);
-            this.cbUseUBlox.Name = "cbUseUBlox";
-            this.cbUseUBlox.Size = new System.Drawing.Size(90, 29);
-            this.cbUseUBlox.TabIndex = 68;
-            this.cbUseUBlox.Text = "uBlox";
-            this.cbUseUBlox.UseVisualStyleBackColor = true;
-            this.cbUseUBlox.CheckedChanged += new System.EventHandler(this.cbUseUBlox_CheckedChanged);
-            // 
             // FormCommSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -633,5 +665,7 @@
         private System.Windows.Forms.Button btnCloseSerial2;
         private System.Windows.Forms.Button btnOpenSerial2;
         private System.Windows.Forms.CheckBox cbUseUBlox;
+        private System.Windows.Forms.CheckBox cbNtripGPS1;
+        private System.Windows.Forms.CheckBox cbNtripGPS2;
     }
 }

@@ -541,9 +541,15 @@ namespace AgOpenGPS
             //set baud and port from last time run
             baudRateGPS = Settings.Default.setPort_baudRate;
             portNameGPS = Settings.Default.setPort_portNameGPS;
+            baudRateGPS2 = Settings.Default.setPort_baudRate2;
+            portNameGPS2 = Settings.Default.setPort_portNameGPS2;
 
             //try and open
             SerialPortOpenGPS();
+            SerialPortOpenGPS2();
+            useUBlox = Properties.Settings.Default.set_useUBlox;
+            useNtripGPS1 = Properties.Settings.Default.set_useNtripGPS1;
+            useNtripGPS2 = Properties.Settings.Default.set_useNtripGPS2;
 
             if (sp.IsOpen)
             {

@@ -331,8 +331,10 @@ namespace AgOpenGPS
                 writer.WriteLine("MaxSteerAngle," + Properties.Vehicle.Default.setVehicle_maxSteerAngle.ToString(CultureInfo.InvariantCulture));
                 writer.WriteLine("MaxAngularVelocity," + Properties.Vehicle.Default.setVehicle_maxAngularVelocity.ToString(CultureInfo.InvariantCulture));
                 writer.WriteLine("IsJRK," + Properties.Settings.Default.setAS_isJRK.ToString(CultureInfo.InvariantCulture));
+                writer.WriteLine("useUBlox," + Properties.Settings.Default.set_useUBlox.ToString(CultureInfo.InvariantCulture));
+                writer.WriteLine("useNtripGPS1," + Properties.Settings.Default.set_useNtripGPS1.ToString(CultureInfo.InvariantCulture));
+                writer.WriteLine("useNtripGPS2," + Properties.Settings.Default.set_useNtripGPS2.ToString(CultureInfo.InvariantCulture));
                 writer.WriteLine("SnapDistance," + Properties.Settings.Default.setAS_snapDistance.ToString(CultureInfo.InvariantCulture));
-
                 writer.WriteLine("isStanleyUsed," + Properties.Vehicle.Default.setVehicle_isStanleyUsed.ToString(CultureInfo.InvariantCulture));
                 writer.WriteLine("StanleyGain," + Properties.Vehicle.Default.setVehicle_stanleyGain.ToString(CultureInfo.InvariantCulture));
                 writer.WriteLine("StanleyHeadingError," + Properties.Vehicle.Default.setVehicle_stanleyHeadingErrorGain.ToString(CultureInfo.InvariantCulture));
@@ -538,6 +540,12 @@ namespace AgOpenGPS
                         line = reader.ReadLine(); words = line.Split(',');
                         Properties.Settings.Default.setAS_isJRK = bool.Parse(words[1]);
                         line = reader.ReadLine(); words = line.Split(',');
+                        Properties.Settings.Default.set_useUBlox = bool.Parse(words[1]);
+                        line = reader.ReadLine(); words = line.Split(',');
+                        Properties.Settings.Default.set_useNtripGPS1 = bool.Parse(words[1]);
+                        line = reader.ReadLine(); words = line.Split(',');
+                        Properties.Settings.Default.set_useNtripGPS1 = bool.Parse(words[1]);
+                        line = reader.ReadLine(); words = line.Split(',');
                         Properties.Settings.Default.setAS_snapDistance = int.Parse(words[1]);
 
                         line = reader.ReadLine(); words = line.Split(',');
@@ -681,6 +689,9 @@ namespace AgOpenGPS
                         vehicle.maxAngularVelocity = Properties.Vehicle.Default.setVehicle_maxAngularVelocity;
 
                         isJRK = Properties.Settings.Default.setAS_isJRK;
+                        useUBlox = Properties.Settings.Default.set_useUBlox;
+                        useNtripGPS1 = Properties.Settings.Default.set_useNtripGPS1;
+                        useNtripGPS2 = Properties.Settings.Default.set_useNtripGPS2;
                         isStanleyUsed = Properties.Vehicle.Default.setVehicle_isStanleyUsed;
                         vehicle.stanleyGain = Properties.Vehicle.Default.setVehicle_stanleyGain;
                         vehicle.stanleyHeadingErrorGain = Properties.Vehicle.Default.setVehicle_stanleyHeadingErrorGain;

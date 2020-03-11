@@ -17,6 +17,7 @@ namespace AgOpenGPS
 {
     public partial class FormGPS
     {
+        protected FormGPS mf;
 
         private Socket clientSocket;                      // Server connection
         private byte[] casterRecBuffer = new byte[256];    // Recieved data buffer
@@ -45,6 +46,7 @@ namespace AgOpenGPS
         public bool isNTRIP_Connecting = false;
         public bool isNTRIP_Sending = false;
         public bool isRunGGAInterval = false;
+        
 
         private void NTRIPtick(object o, EventArgs e)
         {
@@ -58,7 +60,7 @@ namespace AgOpenGPS
             isNTRIP_Connected = false;
             isNTRIP_Starting = false;
             isNTRIP_Connecting = false;
-
+            
             //if we had a timer already, kill it
             if (tmr != null)
             {
@@ -115,7 +117,7 @@ namespace AgOpenGPS
                 this.tmr.Interval = 5000;
                 this.tmr.Tick += new EventHandler(NTRIPtick);
             }
-
+            
             try
             {
                 // Close the socket if it is still open
@@ -219,9 +221,13 @@ namespace AgOpenGPS
             {
                 try
                 {
-                    if (sp.IsOpen)
+                    if (sp.IsOpen & mf.useNtripGPS1)
                     {
                         sp.Write(data, 0, data.Length);
+                    }
+                    if (spGPS2.IsOpen & mf.useNtripGPS2)
+                    {
+                        spGPS2.Write(data, 0, data.Length);
                     }
                 }
                 catch (Exception ex)

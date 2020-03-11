@@ -47,6 +47,9 @@ namespace AgOpenGPS
         {
 
             usejrk.Checked = Properties.Settings.Default.setAS_isJRK  ;
+            cbUseUBlox.Checked = Properties.Settings.Default.set_useUBlox;
+            cbNtripGPS1.Checked = Properties.Settings.Default.set_useNtripGPS1;
+            cbNtripGPS2.Checked = Properties.Settings.Default.set_useNtripGPS2;
 
             //check if GPS port is open or closed and set buttons accordingly
             if (mf.sp.IsOpen)
@@ -105,6 +108,7 @@ namespace AgOpenGPS
             cboxPort2.Items.Clear();
             cboxArdPort.Items.Clear();
             cboxASPort.Items.Clear();
+
             foreach (String s in System.IO.Ports.SerialPort.GetPortNames())
             {
                 cboxPort.Items.Add(s);
@@ -271,13 +275,13 @@ namespace AgOpenGPS
         }
 
         // GPS Serial Port
-        private void cboxBaud2_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void cboxBaud2_SelectedIndexChanged(object sender, EventArgs e)
         {
             mf.spGPS2.BaudRate = Convert.ToInt32(cboxBaud2.Text);
             FormGPS.baudRateGPS2 = Convert.ToInt32(cboxBaud2.Text);
         }
 
-        private void cboxPort2_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void cboxPort2_SelectedIndexChanged(object sender, EventArgs e)
         {
             mf.spGPS2.PortName = cboxPort2.Text;
             FormGPS.portNameGPS2 = cboxPort2.Text;
@@ -342,7 +346,7 @@ namespace AgOpenGPS
             foreach (String s in System.IO.Ports.SerialPort.GetPortNames()) { cboxPort.Items.Add(s); }
 
             cboxPort2.Items.Clear();
-            foreach (String s in System.IO.Ports.SerialPort.GetPortNames()) { cboxPort.Items.Add(s); }
+            foreach (String s in System.IO.Ports.SerialPort.GetPortNames()) { cboxPort2.Items.Add(s); }
         }
 
         #endregion PortSettings //----------------------------------------------------------------
@@ -383,7 +387,21 @@ namespace AgOpenGPS
             Properties.Settings.Default.set_useUBlox = cbUseUBlox.Checked;
             Properties.Settings.Default.Save();
             mf.useUBlox = Properties.Settings.Default.set_useUBlox;
-            
         }
+
+        private void cbNtripGPS1_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.set_useNtripGPS1 = cbNtripGPS1.Checked;
+            Properties.Settings.Default.Save();
+            mf.useNtripGPS1 = Properties.Settings.Default.set_useNtripGPS1;
+        }
+
+        private void cbNtripGPS2_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.set_useNtripGPS2 = cbNtripGPS2.Checked;
+            Properties.Settings.Default.Save();
+            mf.useNtripGPS2 = Properties.Settings.Default.set_useNtripGPS2;
+        }
+
     } //class
 } //namespace
