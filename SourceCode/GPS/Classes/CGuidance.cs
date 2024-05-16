@@ -72,10 +72,10 @@ namespace AgOpenGPS
             //pivotDistanceError = Math.Atan((distanceFromCurrentLinePivot) / (sped)) * 0.2;
             //pivotErrorTotal = pivotDistanceError + pivotDerivative;
 
-            if (mf.avgSpeed > 1
+            if (mf.avgSpeed > 0.2
                 && mf.isBtnAutoSteerOn
                 && Math.Abs(derivativeDistError) < 1
-                && Math.Abs(pivotDistanceError) < 0.25)
+                && Math.Abs(pivotDistanceError) < 0.50)
             {
                 //if over the line heading wrong way, rapidly decrease integral
                 if ((inty < 0 && distanceFromCurrentLinePivot < 0) || (inty > 0 && distanceFromCurrentLinePivot > 0))
@@ -90,7 +90,7 @@ namespace AgOpenGPS
                 //integral slider is set to 0
                 if (mf.vehicle.stanleyIntegralGainAB == 0) inty = 0;
             }
-            else inty *= 0.7;
+            //else inty *= 0.7;
 
             if (mf.isReverse) inty = 0;
 

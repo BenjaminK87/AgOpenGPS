@@ -489,7 +489,7 @@ namespace AgOpenGPS
             nudAntennaPivot.Value = (int)((Properties.Settings.Default.setVehicle_antennaPivot) * mf.m2InchOrCm);
 
             //negative is to the right
-            nudAntennaOffset.Value = (int)(Math.Abs(Properties.Settings.Default.setVehicle_antennaOffset) * mf.m2InchOrCm);
+            nudAntennaOffset.Value = (decimal)(Math.Abs(Properties.Settings.Default.setVehicle_antennaOffset) * mf.m2InchOrCm);
 
             rbtnAntennaLeft.Checked = false;
             rbtnAntennaRight.Checked = false;

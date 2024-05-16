@@ -75,6 +75,8 @@ namespace AgOpenGPS
         public double avgSpeed, previousSpeed;//for average speed
         public int crossTrackError;
 
+        public double integralValue;
+
         //youturn
         public double distancePivotToTurnLine = -2222;
         public double distanceToolToTurnLine = -2222;

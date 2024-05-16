@@ -194,7 +194,10 @@ namespace AgOpenGPS
 
             //Stanley
             else if (mf.isStanleyUsed)
+            {
                 mf.gyd.StanleyGuidanceABLine(currentLinePtA, currentLinePtB, pivot, steer);
+                mf.integralValue = mf.gyd.inty;
+            }
 
             //Pure Pursuit
             else
@@ -235,7 +238,7 @@ namespace AgOpenGPS
 
                     if (mf.isBtnAutoSteerOn
                         && Math.Abs(pivotDerivative) < (0.1)
-                        && mf.avgSpeed > 2.5
+                        && mf.avgSpeed > 0.2
                         && !mf.yt.isYouTurnTriggered)
                     //&& Math.Abs(pivotDistanceError) < 0.2)
 
@@ -250,12 +253,12 @@ namespace AgOpenGPS
                             if (Math.Abs(distanceFromCurrentLinePivot) > 0.02)
                             {
                                 inty += pivotDistanceError * mf.vehicle.purePursuitIntegralGain * -0.02;
-                                if (inty > 0.2) inty = 0.2;
-                                else if (inty < -0.2) inty = -0.2;
+                                if (inty > 0.4) inty = 0.4;
+                                else if (inty < -0.4) inty = -0.4;
                             }
                         }
                     }
-                    else inty *= 0.95;
+                    //else inty *= 0.95;
                 }
                 else inty = 0;
 
@@ -292,6 +295,8 @@ namespace AgOpenGPS
 
                 //calculate the the new x in local coordinates and steering angle degrees based on wheelbase
                 double localHeading;
+
+                mf.integralValue = inty;
 
                 if (isHeadingSameWay) localHeading = glm.twoPI - mf.fixHeading + inty;
                 else localHeading = glm.twoPI - mf.fixHeading - inty;

@@ -390,6 +390,7 @@ namespace AgOpenGPS
                 if (isMetric)  //metric or imperial
                 {
                     lblSpeed.Text = SpeedKPH;
+                    lblIntegral.Text = integralValue.ToString("F99");
                     //btnContour.Text = XTE; //cross track error
 
                 }
