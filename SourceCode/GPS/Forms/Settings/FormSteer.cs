@@ -244,6 +244,12 @@ namespace AgOpenGPS
                 hsbarSensor.Visible = false;
                 lblhsbarSensor.Visible = false;
             }
+
+            if (!mf.IsOnScreen(Location, Size, 1))
+            {
+                Top = 0;
+                Left = 0;
+            }
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -378,6 +384,25 @@ namespace AgOpenGPS
             SettingsIO.ExportAll(mf.vehiclesDirectory + mf.vehicleFileName + ".XML");
         }
 
+        private void tabSettings_Enter(object sender, EventArgs e)
+        {
+            cboxSteerInReverse.Checked = Properties.Settings.Default.setAS_isSteerInReverse;
+
+        }
+
+        private void tabSettings_Leave(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.setAS_isSteerInReverse = cboxSteerInReverse.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void cboxSteerInReverse_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.setAS_isSteerInReverse = cboxSteerInReverse.Checked;
+            mf.isSteerInReverse = cboxSteerInReverse.Checked;
+
+        }
+
 
         #region Alarms Tab
 
@@ -408,61 +433,23 @@ namespace AgOpenGPS
 
             nudLineWidth.Value = Properties.Settings.Default.setDisplay_lineWidth;
 
-            //cboxAutoSteerAuto.Checked = Properties.Settings.Default.setAS_isAutoSteerAutoOn;
-            //if (Properties.Settings.Default.setAS_isAutoSteerAutoOn)
-            //{
-            //    cboxAutoSteerAuto.Image = Properties.Resources.AutoSteerOn;
-            //    cboxAutoSteerAuto.Text = "Remote";
-            //}
-            //else
-            //{
-            //    cboxAutoSteerAuto.Image = Properties.Resources.AutoSteerOff;
-            //    cboxAutoSteerAuto.Text = gStr.gsManual;
-            //}
-
-            //cboxConstantContour.Checked = Properties.Settings.Default.setAS_isConstantContourOn;
-            cboxSteerInReverse.Checked = Properties.Settings.Default.setAS_isSteerInReverse;
+            nudcmPerPixel.Value = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
 
             label20.Text = mf.unitsInCm;
         }
 
         private void tabAlarm_Leave(object sender, EventArgs e)
         {
-            //Properties.Settings.Default.setAS_isAutoSteerAutoOn = cboxAutoSteerAuto.Checked;
-            Properties.Settings.Default.setAS_isSteerInReverse = cboxSteerInReverse.Checked;
             Properties.Settings.Default.Save();
         }
-
-
-        //no longer used
-        private void cboxAutoSteerAuto_Click(object sender, EventArgs e)
+        private void nudcmPerPixel_Click(object sender, EventArgs e)
         {
-            //if (cboxAutoSteerAuto.Checked)
-            //{
-            //    cboxAutoSteerAuto.Image = Properties.Resources.AutoSteerOn;
-            //    cboxAutoSteerAuto.Text = "Remote";
-            //    mf.ahrs.isAutoSteerAuto = true;
-            //}
-            //else
-            //{
-            //    cboxAutoSteerAuto.Image = Properties.Resources.AutoSteerOff;
-            //    cboxAutoSteerAuto.Text = gStr.gsManual;
-            //    mf.ahrs.isAutoSteerAuto = false;
-            //}
+            if (mf.KeypadToNUD((NudlessNumericUpDown)sender, this))
+            {
+                Properties.Settings.Default.setDisplay_lightbarCmPerPixel = ((int)nudcmPerPixel.Value);
+                mf.lightbarCmPerPixel = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
+            }
         }
-
-        private void cboxSteerInReverse_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.setAS_isSteerInReverse = cboxSteerInReverse.Checked;
-            mf.isSteerInReverse = cboxSteerInReverse.Checked;
-
-        }
-
-        //private void cboxConstantContour_Click(object sender, EventArgs e)
-        //{
-        //    Properties.Settings.Default.setAS_isConstantContourOn = cboxConstantContour.Checked;
-        //    mf.isConstantContourOn = cboxConstantContour.Checked;
-        //}
 
         private void nudLineWidth_Click(object sender, EventArgs e)
         {

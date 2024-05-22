@@ -27,7 +27,7 @@ namespace AgOpenGPS
         public byte flagColor = 0;
 
         //how many cm off line per big pixel
-        public int lightbarCmPerPixel =2;
+        public int lightbarCmPerPixel = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
 
         //polygon mode for section drawing
         public bool isDrawPolygons = false, isPauseFieldTextCounter = false;
@@ -672,9 +672,9 @@ namespace AgOpenGPS
             tool.contourWidth = (tool.width - tool.overlap) / 3.0;
 
             //load the lightbar resolution
-            lightbarCmPerPixel = 2;
+        lightbarCmPerPixel = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
 
-            isStanleyUsed = Properties.Settings.Default.setVehicle_isStanleyUsed;
+        isStanleyUsed = Properties.Settings.Default.setVehicle_isStanleyUsed;
 
             //main window first
             if (Settings.Default.setWindow_Maximized)
@@ -693,6 +693,12 @@ namespace AgOpenGPS
             {
                 Location = Settings.Default.setWindow_Location;
                 Size = Settings.Default.setWindow_Size;
+            }
+
+            if (!IsOnScreen(Location, Size, 1))
+            {
+                Top = 0;
+                Left = 0;
             }
 
             //night mode
